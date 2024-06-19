@@ -1,0 +1,12 @@
+.Rhistory
+.Rproj.user
+
+# attendees
+names.txt
+
+# exported HTML
+*.html
+
+# files related to exported HTML
+# e.g., part_i_motivation_files
+*_files

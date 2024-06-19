@@ -1,0 +1,243 @@
+---
+title: "Data Manipulation with dplyr"
+subtitle: "Statistical Computing with R"
+author: "Waseem Medhat"
+date: "`r Sys.Date()`"
+logo: "content/r-logo.svg"
+output:
+  ioslides_presentation:
+    wide: true
+    mathjax: local
+    self_contained: false
+---
+
+What is `dplyr`?
+----------------
+
+<div class="red2">
+"How can I work efficiently with data frames?"
+</div>
+
+- `dplyr` is most often the library of choice to work with data frames and
+  compute variables, calculate summaries or grouped summaries, filter or sort
+  some values, etc.  It offers a new mini-language with readable syntax.
+
+    + `select()` to select columns.
+    + `filter()` to filter rows meeting some (logical) criteria.
+    + `mutate()` to compute new variables.
+    + `summarize()` to compute summary statistics.
+    + `group_by()` to stratify calculations.
+    + `arrange()` to sort values.
+    + The "pipe" operator `%>%`.
+
+The pipe
+--------
+
+```{r}
+# root mean squared error (RMSE)
+errors <- c(1, 2, -1, 0, -3)
+rmse <- sqrt(mean(errors ^ 2))
+rmse
+```
+
+- This example used nested functions. Wouldn't it be easier to read if the syntax
+  reflected the order of operations?
+
+```
+Square the errors --then-> calculate the mean --then-> take the square root
+```
+
+The pipe
+--------
+
+- The pipe operator `%>%` takes the output of its LHS and "pipes" it into the
+  RHS function _as a first argument_.
+
+```{r message=FALSE}
+library(dplyr)
+```
+
+```{r}
+(errors ^ 2) %>% mean() %>% sqrt()
+```
+
+The pipe
+--------
+
+- **Note**: the pipe works very well with `dplyr` because its functions take a
+  data frame and return a data frame.
+
+```
+data frame with height and weight %>% 
+  calculate BMI as new variable %>% 
+  filter BMIs < 18 %>%
+  calculate mean age
+```
+
+Select variables
+----------------
+
+```{r echo=FALSE, message=FALSE, include=FALSE}
+knitr::knit("part_ii_basics.Rmd")
+```
+
+- Data frames can be piped into `select()` with the names of the desired
+  arguments.
+
+```{r}
+names(statisticians)
+```
+
+
+```{r}
+statisticians %>% select(name, age)
+```
+
+Remove variables
+-----------------
+
+- If you want to remove a variable instead of selecting it, put `-` before its
+  name.
+
+- This is useful when you have a large number of columns and you want all of
+  them except a few.
+
+```{r}
+statisticians %>% select(-name)
+```
+
+Filter rows
+-----------
+
+- Data frames are piped into `filter()` with a comparison test (with or without
+  boolean operators) as filter criteria.
+
+```{r}
+statisticians %>% filter(disease == "normal" & age < 40)
+```
+
+Compute new variables
+---------------------
+
+- `mutate()` allows you to derive new variables from existing ones.
+
+```{r}
+statisticians %>% mutate(age_z = (age - mean(age)) / sd(age))
+```
+
+Compute new variables
+---------------------
+
+- It can also replace existing variables if you use its name as the argument
+  name.
+
+```{r}
+statisticians %>% mutate(name = toupper(name))
+```
+
+Compute summary statistics
+--------------------------
+
+- Aggregate functions (functions that take multiple numbers and return a single
+  number, like `mean()`) can be called on variables with `summarize()`.
+
+```{r}
+statisticians %>% summarize(mean_age = mean(age))
+```
+
+- Multiple summaries can be computed simultaneously.
+
+```{r}
+statisticians %>% summarize(mean_age = mean(age),
+                            sample_size = n()) # n() is special for summarize()
+```
+
+Grouped summaries
+-----------------
+
+- Data frames are piped into `group_by()` to make any subsequent calculations
+  grouped/stratified by a certain grouping variable (or more).
+
+```{r message=FALSE}
+# calculate mean age in each disease group
+statisticians %>% 
+  group_by(disease) %>% 
+  summarize(mean_age = mean(age))
+```
+
+Grouped summaries
+-----------------
+
+```{r message=FALSE}
+# mean age by disease by age group
+statisticians %>% 
+  group_by(disease, older_than_50) %>% 
+  summarize(mean_age = mean(age),
+            sample_size = n())
+```
+
+Sort rows
+---------
+
+- `arrange()` sorts the rows of a data frame by one or more variables.
+
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarize(mean_wt = mean(wt)) %>% 
+  arrange(mean_wt)
+```
+
+Sort rows
+---------
+
+- Wrapping a variable name in `desc()` sorts by descending order.
+
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarize(mean_wt = mean(wt)) %>% 
+  arrange(desc(mean_wt))
+```
+
+A step back
+===========
+
+The power of `dplyr` 
+---------------------
+
+<div class="red2">
+"What does `dplyr` add to my tool box that is not in, say, SPSS?"
+</div>
+
+- **Nondestructive**: The `dplyr` verbs always return new data frames. Notice that
+  `statisticians` will always be intact unless something was explicitly assigned
+  into it.
+- **Flexibility**: operations can be combined and arranged in any way.
+    + Warning: consider the order carefully as it might be a source of errors.
+
+```
+statisticians %>% 
+  mutate(age_z = (age - mean(age)) / sd(age)) %>% 
+  select(name, disease) %>% 
+  filter(age_z < 50)  # error: object age_z not found
+```
+
+
+Errors
+------
+
+<div class="red2">
+"Why is my code not working?"
+</div>
+
+- **Wrong syntax**:
+    + forgot to close a parenthesis
+    + extra commas
+    + `=` instead of `==`
+- **Wrong input type**:
+    + `mean()` with a character
+    + `filter()` with a vector
+- Forgot to create a variable or load a package.
+- Everything is correct to R but **wrong logic**.
+

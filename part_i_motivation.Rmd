@@ -1,0 +1,175 @@
+---
+title: "Motivation and Mindset"
+subtitle: "Statistical Computing with R"
+author: "Waseem Medhat"
+date: "`r Sys.Date()`"
+logo: "content/r-logo.svg"
+output:
+  ioslides_presentation:
+    wide: true
+---
+
+Resources
+---------
+
+- Programming Languages (Dan Grossman, University of Washington/Coursera)
+    + https://www.coursera.org/learn/programming-languages
+
+- Python for Everybody (Charles Severance, University of Michigan/Coursera)
+    + https://www.coursera.org/learn/python
+
+- Hands-on Programming with R (Garrett Grolemund)
+    + https://rstudio-education.github.io/hopr/
+
+- Data Science with R (Hadley Wickham)
+    + https://r4ds.had.co.nz/
+
+R for Biostatisticians
+----------------------
+
+<div class="red2">
+"Why should I learn R?"
+</div>
+
+- **Versatile**:
+    + Can replace most (if not all) of your tool kit.
+
+- **Educational**:
+    + You will get more familiar with documentation.
+    + You can simulate data and test theories.
+
+- **Plain text**:
+    + Easy to write and share.
+    + Concise language to express your ideas.
+
+
+R for Biostatisticians (cont.)
+----------------------
+
+<div class="red2">
+"Why should I learn R?"
+</div>
+
+- **Reproducible**:
+    + Your methodology is your code.
+- **Free**:
+    + Costs nothing and open for everyone.
+- **Supported**:
+    + Strong, helpful community.
+
+More details here:
+https://waseem-medhat.netlify.app/post/why-r/
+
+Python for Biostatisticians
+---------------------------
+
+<div class="red2">
+"But should I learn Python?"
+</div>
+
+- R is "made by statisticians for statisticians".
+
+- Python is a general purpose programming language.
+
+- No one is ultimately more powerful. The choice depends on application and/or
+  subjective taste.
+
+- Personal recommendation: learn Python if you are interested in programming
+  (only).
+
+Pieces of a Programming Language
+--------------------------------
+
+<div class="red2">
+"What should I learn in a programming language?"
+</div>
+
+- **Syntax**: How can I write an expression?
+- **Semantics**: What does it mean?
+
+_You will learn these two first._
+
+- **Idioms**: What is the common way to do things?
+- **Libraries**: What functions are available for me to use?
+
+_You will learn these two last._
+
+- **Tools**: How can I make my life easier?
+
+_RStudio._
+
+Paradigm Shift
+--------------
+
+<div class="red2">
+"How should I approach learning R?"
+</div>
+
+- Less **"user"**; more **"maker"**.
+    + High vs. low level (of detail)
+
+- Understand computers.
+    + They do 2 things: **calculate** and **store**.
+    + Computers are flexible, **not smart** (e.g. if R knows "friend", it
+      doesn't know "Friend").
+    + Software is only a sequence of steps executed in order.
+
+- Learn **problem solving**.
+    + Make up real-life problems, no matter how simple.
+    + Divide and conquer.
+
+Expectations
+------------
+
+<div class="red2">
+"How can I benefit from this course and my path forward?"
+</div>
+
+- What this course is **not**:
+    + a statistics course.
+    + a complete reference.
+
+- Don't worry about:
+    + terminology and memorization. (Learn how to use references.)
+    + making something practical or meaningful at first. (Small pieces add up.)
+    + errors!!
+    + asking questions.
+
+Requirements
+------------
+
+<div class="red2">
+"What will I use in this course?"
+</div>
+
+- R
+- RStudio
+- Package `dplyr`
+- Package `ggplot2`
+
+A Look at RStudio
+-----------------
+
+<div class="red2">
+"How can I use RStudio?"
+</div>
+
+- Panes
+- Scripts
+- Completion
+- Running code
+
+Questions
+---------
+
+### True or false?
+
+1. The computer fundamentally does two things: performs calculations and store
+   results.
+1. Performing statistical analyses in R requires advanced knowledge of
+   programming.
+1. If there is something in R called "ls()" I can write it as "LS()" and R will
+   understand.
+1. A computer program is a sequence of commands for the computer to execute.
+
+What is the difference between R or RStudio? Or are they the same thing?

@@ -1,0 +1,486 @@
+---
+title: "Basics and Data Structures"
+subtitle: "Statistical Computing with R"
+author: "Waseem Medhat"
+date: "`r Sys.Date()`"
+logo: "content/r-logo.svg"
+output:
+  ioslides_presentation:
+    wide: true
+    mathjax: local
+    self_contained: false
+---
+
+Arithmetic
+----------
+
+<div class="red2">
+"How does R calculate?"
+</div>
+
+- Addition: `1 + 1`
+- Subtraction: `5 - 3`
+- Multiplication: `2 * 5`
+- Division: `10 / 2`
+- Exponentiation: `2 ^ 3` _or_ `2 ** 3`
+- Integer division: `10 %/% 3`
+- Remainder (modulus): `10 %% 3`
+- Parentheses: `(2 + 10) %% 3`
+
+Arithmetic
+----------
+
+- $b_{0} = 37.22727$
+- $b_{1} = -3.87783, x_{1} = 3.325$
+- $b_{2} = -0.03177, x_{2} = 123$
+
+$y = b_{0} + b_{1} x_{1} + b_{2} x_{2}$
+
+```{r}
+37.22727 + (-3.87783 * 3.325) + (-0.03177 * 123)
+```
+
+Assignment
+----------
+
+<div class="red2">
+"How does R store calculations?"
+</div>
+
+<div class="red2">
+"How can I save results for later use?"
+</div>
+
+_The assignment operator:_ `<-` 
+
+- A "less than" sign followed by a dash
+
+`age <- 38`
+
+- 38 is _assigned_ to a _variable_ (object) named `age`.
+- You can read it "age gets 38"
+
+Assignment
+----------
+
+From the previous example...
+
+```{r}
+b0 <- 37.22727
+
+b1 <- -3.87783
+x1 <- 3.325
+
+b2 <- -0.03177
+x2 <- 123
+
+y <- b0 + b1*x1 + b2*x2
+y
+```
+
+Assignment
+----------
+
+```{r}
+# LHS        RHS
+  y     <-   b0 + b1*x1 + b2*x2
+```
+
+- Assignment produces no output.
+- The calculation in the right-hand side (RHS) is processed _first._ Then the
+  resulting _value_ is assigned to the variable name in the left-hand side
+  (LHS).
+- Writing the name of the variable returns its value as output.
+- The stored variable contains the value but not how this value is calculated.
+
+Assignment
+----------
+
+- Steps:
+
+```
+y <- b0 + b1*x1 + b2*x2
+
+y <- 37.22727 + (-3.87783 * 3.325) + (-0.03177 * 123)
+
+y <- 20.42578
+```
+
+
+Vectors
+-------
+
+<div class="red2">
+"How does R support statistical variables?"
+</div>
+
+- A vector is a set/sequence of data of some type (e.g. continuous, nominal,
+  etc.)
+- Built with `c()`
+
+```{r}
+age <- c(50, 36, 61, 40, 28, 32)
+age
+```
+
+Vectors
+-------
+
+- A handy shortcut - all numbers from x to y: `x:y`.
+- We don't need `c()` in this case.
+
+```{r}
+course_id <- 1721701:1721712
+course_id
+```
+
+_Notice the numbers between square brackets, [1] and [10], represent the index
+of the output vector._
+
+Indexing
+--------
+
+<div class="red2">
+"Given a vector of ages, how can I get the first three ages?"
+</div>
+
+- Indexing is simply extracting a value by its _index_.
+- Done with the syntax `vector[i]` where `i` is the desired index/indices.
+
+```{r}
+course_id[5]
+```
+
+```{r}
+first_3_ages <- age[1:3]
+first_3_ages
+```
+
+Vector operations
+-----------------
+
+<div class="red2">
+"Can I do arithmetic operations on whole vectors?
+</div>
+
+<div class="red2">
+"Can I _compute new variables_ out of the existing ones?"
+</div>
+
+- Ages have a mean of `r round(mean(age), 2)` and a standard deviation of
+  `r round(sd(age), 2)`. Convert them to Z-scores.
+
+```{r}
+age_z <- (age - 41.17) / 12.3
+age_z
+```
+
+Vector operations
+-----------------
+
+- In the last example, we used a vector and single numbers as operands (i.e. we
+  subtracted a single number from all ages, then divided all these numbers by a
+  single number as well).
+
+- If both operands are vectors **of equal length**, the operation is done
+  element-wise.
+    + In `v1 + v2`: the 1^st^ element in `v1` is added to the 1^st^ element in
+      `v2`, the 2^nd^ to the 2^nd^, and so on...
+
+```{r}
+weight <- c(70,   89,   103,  67,   100)
+height <- c(1.80, 1.56, 1.70, 1.90, 1.66)
+bmi <- weight / (height ^ 2)
+bmi
+```
+
+
+Comments
+--------
+
+<div class="red2">
+"How can I document my code?"
+</div>
+
+- Comments can be written with code with a hash/pound symbol `#`.
+- Everything after the `#` is "commented out" and is not run in R.
+- They only serve the programmer for clarifying or separating code.
+- They can also be used to "disable" code.
+
+```{r}
+# get the unique digit(s) of course id
+short_id <- course_id - 1721700
+short_id   # prints short_id (don't do this)
+```
+
+Data types
+----------
+
+<div class="red2">
+"How can I represent other variable types?"
+</div>
+
+R supports the statistical data types, and more...
+
+- `numeric`: what we were working with so far.
+- `character`: for "strings" of text.
+- `logical`: takes exactly one of two values, `TRUE` and `FALSE`. It is used for
+  comparison tests.
+- `factor`: a special type of vector for categorical variables with specific
+  levels
+
+Data types
+----------
+
+```{r}
+# character
+name <- c("Cohen", "Pearson", "Neymann",
+          "Fisher", "Wilcoxon", "Wallis")
+name
+```
+
+- Factors can be created from character vectors by wrapping them into
+  `factor()`.
+
+```{r}
+disease <- factor(c("normal", "diseased", "diseased",
+                    "diseased", "normal", "normal"))
+disease
+```
+
+Comparison tests
+----------------
+
+Used to compare values or vectors and return a `logical` (aka boolean) object.
+
+- Greater: `>`
+- Greater or equal: `>=`
+- Less: `<`
+- Less or equal: `<=`
+- Equal: `==` (expect a lot of errors)
+- Not equal: `!=`
+- Negation: `!`
+- Value present in a vector: `value %in% vector`
+
+Comparison tests
+----------------
+
+```{r}
+# remember age: 50 36 61 40 28 32
+older_than_50 <- age >= 50
+older_than_50
+```
+
+```{r}
+not_older_than_50 <- ! older_than_50
+not_older_than_50
+```
+
+```{r}
+# is there at least one 40-year old patient?
+40 %in% age
+```
+
+Boolean operators
+-----------------
+
+Combine multiple comparison tests to make AND/OR logic.
+
+- The AND operator is `&`, and the OR operator is `|`.
+
+```{r}
+# age:      50     36       61       40       28     32
+# diseased: normal diseased diseased diseased normal normal
+
+(age >= 30) & (age <= 50) # ages between 30 and 50, inclusive
+```
+
+```{r}
+(age > 40) | (disease == "diseased") # older than 50 or diseased individuals
+```
+
+Matrices
+--------
+
+- Simply two-dimensional vectors.
+- Indexed with two numbers.
+
+```{r}
+mat <- matrix(c(1:10), nrow = 2, ncol = 5)
+mat
+mat[2,1]
+```
+
+
+Data frames
+-----------
+
+<div class="red2">
+"How does R represent tabular data with multiple variables?"
+</div>
+
+- The most important data structure for statistics.
+- Like tables, it has rows/observations, and columns/variables.
+
+```{r}
+statisticians <- data.frame(name, age, disease, older_than_50)
+statisticians
+```
+
+Data frames
+-----------
+
+<div class="red2">
+"How to work on individual variables from data frames?"
+</div>
+
+- If you import a table as the data frame, the indivudial variables are _not_
+  readily availabe to R as vectors. You have to point R to the data frame
+  _then_ the variable inside it with the syntax `data_frame$variable`.
+
+```{r}
+# the data frame `mtcars` is built into R
+# one of the variables in `mtcars` is `cyl`
+mtcars$cyl
+
+# writing `cyl` only results in an error
+```
+
+Recap
+-----
+
+- The whole lesson so far was about working with R's _data structures_ (forms
+  and methods of storing, organizing, and accessing data).
+
+- Individual variables are stored in vectors.
+
+- Data types include `numeric`, `character`, `logical`, and `factor`.
+
+- Data frames are the direct equivalent to tables in statistical data, and each
+  variable/column in the data frame can be thought of as a vector.
+
+Functions
+---------
+
+<div class="red2">
+"How to do anything with the data?"
+</div>
+
+Functions are the main way to do any operation (statistical or otherwise) in R.
+
+- To do an operation we _call_ the corresponding function using the syntax
+  `function(some_input)`.
+
+- Function inputs are called _arguments_.
+
+- R provides a lot of functions. Some are statistical and others manipulate the
+  data in some way.
+
+Functions
+---------
+
+```{r}
+mean(statisticians$age)
+```
+
+-  Here, I called the function `mean()`, which takes a single vector
+  (`statisticians$age`) as an argument and _returns_ a mean of the values in
+  that vector.
+- Each function expects a certain type of input. Do you think `mean()` would
+  accept a character vector?
+
+Functions
+---------
+
+- Functions can take multiple arguments.
+
+```{r}
+seq(2, 10)
+```
+
+- Function arguments are actually named, but these names can be ignored if the
+  inputs are in the correct order. Each argument has a `=` between its name and
+  value.
+
+```{r}
+seq(from = 2, to = 10, by = 2)
+```
+
+Functions
+---------
+
+- Functions can be nested, and are evaluated inside out.
+
+```{r}
+# root mean squared error (RMSE)
+errors <- c(1, 2, -1, 0, -3)
+rmse <- sqrt(mean(errors ^ 2))
+rmse
+```
+- "Square root of the mean of the squared errors."
+
+```
+  sqrt( mean( errors^2 ) )
+= sqrt( mean( c(1, 2, -1, 0, -3) ^ 2 ) )
+= sqrt( mean( c(1, 4, 1, 0, 9) ) )
+= sqrt( 3 )
+= 1.730521
+```
+
+Example functions
+-----------------
+
+- Statistics:
+
+`mean()`, `median()`, `sd()`, `IQR()`, `t.test()`, `chisq.test()`
+
+- Working with data:
+
+`class()`, `str()`, `summary()`, `names()`, `data.frame()`, `c()`
+
+- Math:
+
+`sqrt()`, `exp()`, `log()`, `sum()`
+
+Packages
+--------
+
+<div class="red2">
+"What if I want to do something not available in base R?"
+</div>
+
+- A package is a collection of functions, data, documents, and/or other things.
+
+- Packages are written by independent developers other than the R Core Team.
+
+- At the time of writing this, 16066 packages are available on CRAN and much
+  more on other repositories.
+
+- We will study two very popular packages.
+    + `dplyr` for data manipulation.
+    + `ggplot2` for data visualization.
+
+A step back
+===========
+
+Your library
+------------
+
+<div class="red2">
+"How can I code without memorizing anything?"
+</div>
+
+- Build a resource library.
+- Keep copies of code you wrote, and document it with comments.
+- Look for cheatsheets:
+    + RStudio's website has a good collection of cheatsheets
+      https://rstudio.com/resources/cheatsheets/
+    + Most of this lecture is covered in the base R cheatsheet
+      http://github.com/rstudio/cheatsheets/raw/master/base-r.pdf
+- Google anything.
+
+
+Questions
+---------
+
+1. Explain how this piece of code works:  `y <- y + 1`

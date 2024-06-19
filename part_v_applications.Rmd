@@ -1,0 +1,228 @@
+---
+title: "Tools for Practice"
+subtitle: "Statistical Computing with R"
+author: "Waseem Medhat"
+date: "`r Sys.Date()`"
+logo: "content/r-logo.svg"
+output:
+  ioslides_presentation:
+    wide: true
+---
+
+Help
+----
+
+- Functions are associated with help pages (documentation) containing
+  information about arguments, expected inputs and outputs, resources on
+  statistical method, etc.
+- Simply, put `?` before something to access its help page (if it exists).
+
+```{r eval=FALSE}
+?which()
+```
+
+Vignettes
+---------
+
+- These are tutorials or demonstration documents that are associated with each
+  packages.
+- Use `vignette(package = "<package_name>")` to see available vignettes for any
+  package
+- Use `vignette("<vignette_name>")` to open the vignette.
+
+```
+library(dplyr)
+vignette(package = "dplyr")
+vignette("rowwise")
+```
+
+Missing data
+------------
+
+- Coded in R as `NA`.
+- Can be in vectors (of any type) or data frames.
+
+```{r}
+c(9, 2, NA, 1, 8, NA, 5)
+```
+
+- Keep in mind the difference between `NA` and
+    + `NULL` the absence of an object
+    + `NaN` "not a number" might be due to erroneous calculations
+
+```{r}
+0 / 0
+```
+
+
+Importing SPSS data
+-------------------
+
+- R has a built-in package called `foreign` which allows importing files from
+  other statistical packages: SPSS, SAS, etc.
+
+```
+library(foreign)
+read.spss("<file_name.sav>", to.data.frame = TRUE)
+```
+
+Working with files
+------------------
+
+- R looks for files relative to the "current" directory, known as the _working
+  directory_.
+
+- You can use `getwd()` and `setwd()` to find or change the working directory,
+  respectively.
+
+- Instead of code, RStudio has options in the file browser to find and set the
+  working directory.
+
+Student's t-test
+----------------
+
+The `t.test()` function allows performing all the t-test family. The type of
+test is determined by the arguments:
+
+- `x`: dependent variable's observations of group 1 (numeric)
+- `y`: dependent variable's observations of group 2 (numeric)
+    + We won't provide an argument here in a 1-sample t-test.
+    + both `x` and `y` can be replaced with a formula.
+- `alternative`: test direction, either `"two.sided"`, `"less"`, or
+  `"greater"`
+- `mu`: population null value
+- `paired`: whether or not the test is paired (logical)
+- `var.equal`: whether or not to assume equal variance (logical)
+- `conf.level`: confidence level as a decimal (< 1) not a percentage
+
+Student's t-test
+----------------
+
+```{r}
+# defaults
+# var.equal = FALSE, alternative = "two.sided", mu = 0
+# paired = FALSE,    conf.level = 0.95
+t.test(x = iris$Sepal.Length[1:50],
+       y = iris$Sepal.Length[51:100])
+```
+
+Chi-squared test
+----------------
+
+- Introducing a new function: `table()` which takes a data frame of two
+  categorical variables and returns a contingency table.
+
+```{r echo=FALSE, message=FALSE, include=FALSE}
+knitr::knit("part_ii_basics.Rmd")
+library(dplyr)
+```
+
+```{r}
+disease_vs_older50 <- statisticians %>% 
+  select(disease, older_than_50) %>% 
+  table()
+disease_vs_older50
+```
+
+Chi-squared test
+----------------
+
+Output from `table()` can be used as input to `chisq.test()`.
+
+```{r}
+chisq.test(disease_vs_older50)
+```
+
+Linear regression
+-----------------
+
+- Uses a concise formula syntax.
+- No need to create dummy variables. R takes the (factor) predictor(s) and
+  automatically creates the dumy variables.
+
+```{r}
+iris_model <- lm(Sepal.Length ~ Sepal.Width + Species, data = iris)
+```
+
+- The object `iris_model` contains the model, and it can be used with a wide
+  range of functions that retrieve residuals, coefficients, diagnostics, etc.
+
+- Example functions that work with an `lm` object: `summary()`, `residuals()`,
+  `coef()`, `predict()`, `hatvalues()`, `cooks.distance()`
+
+Linear regression output
+------------------------
+
+```{r eval=FALSE}
+summary(iris_model)
+```
+
+```
+Call:
+lm(formula = Sepal.Length ~ Sepal.Width + Species, data = iris)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.30711 -0.25713 -0.05325  0.19542  1.41253 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)    
+(Intercept)         2.2514     0.3698   6.089 9.57e-09 ***
+Sepal.Width         0.8036     0.1063   7.557 4.19e-12 ***
+Speciesversicolor   1.4587     0.1121  13.012  < 2e-16 ***
+Speciesvirginica    1.9468     0.1000  19.465  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+
+Linear regression output
+------------------------
+
+```
+Residual standard error: 0.438 on 146 degrees of freedom
+Multiple R-squared:  0.7259,	Adjusted R-squared:  0.7203 
+F-statistic: 128.9 on 3 and 146 DF,  p-value: < 2.2e-16
+```
+
+Formula syntax
+--------------
+
+- Simple: `D ~ I`
+- Multiple: `D ~ I1 + I2`
+- Interaction term: `D ~ I1 + I2 + I3 * I4`
+    + Using `*` adds `I3`, `I4` and the interaction between them.
+
+
+R Markdown
+----------
+
+- A simple but elegant way to write documents.
+- Can produce Word, PowerPoint, PDF documents, PDF slides, and HTML out of the
+  box.
+- Can be extended with packages to create books, websites, thesis dissertations,
+  and dashboards.
+- A document is written in some simple, readable syntax which is then "knitted"
+  to the desired output.
+
+R Markdown example
+------------------
+
+```
+---
+title: "Cross-Sectional Study of Smokers"
+author: "Waseem Medhat"
+date: 2020-12-31
+---
+
+# 1. Introduction
+
+## 1.1. Background
+
+Est quos *consectetur* ex. Inventore accusamus vero eum incidunt ad omnis eum
+voluptates. Doloribus similique modi perspiciatis quia iusto quam dignissimos.
+
+## 1.2 Current Research
+
+Est quos consectetur ex. Inventore **accusamus** vero eum incidunt ad omnis eum
+voluptates. Doloribus similique modi perspiciatis quia iusto quam dignissimos.
+```

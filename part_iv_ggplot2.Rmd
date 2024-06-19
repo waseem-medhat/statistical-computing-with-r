@@ -1,0 +1,172 @@
+---
+title: "Data Visualization with ggplot2"
+subtitle: "Statistical Computing with R"
+author: "Waseem Medhat"
+date: "`r Sys.Date()`"
+logo: "content/r-logo.svg"
+output:
+  ioslides_presentation:
+    wide: true
+---
+
+The colorful part of the course
+-------------------------------
+
+- `ggplot2` is an elegant package for drawing graphs.
+- One of the biggest competitive advantages of R compared to other data analytic
+  software.
+- It has a layer-based syntax.
+- Based on the Grammar of Graphics: a philosophy of looking at graphs.
+
+Philosophy
+----------
+
+<div class="red2">
+"What is a graph? And how does it relate to the data?"
+</div>
+
+- A graph is a visual representation of data, in which data are mapped to
+  _aesthetic_ properties (e.g. length, color, X/Y coordinates) of some
+  _geometric_ shapes (e.g. points, bars, lines).
+
+- In a simple scatterplot:
+    + The geometric shape is a point/circle.
+    + The aesthetics are X/Y coordinates.
+
+- In a bar chart:
+    + The geometric shape is a bar/rectangle.
+    + The aesthetics are X coordinates and bar height.
+
+General syntax
+--------------
+
+- `ggplot()` is used to put the base layer given two arguments: data to be
+  plotted (must be a data frame) and aesthetic mapping `aes()`.
+- Each additional layer is added with a plus sign and a `geom_****()` function
+  to add some shapes.
+- Other non-geom functions can be added for customization.
+
+```{r message=FALSE}
+# always remember to load the package
+library(ggplot2)
+```
+
+```
+ggplot(<data_frame>, aes(x = <a_variable>, <...>)) +
+  geom_<something>(<...>)
+```
+
+Scatterplots
+------------
+
+```{r fig.height=4}
+# first layer         aesthetics              geometric shape
+ggplot(data = mtcars, aes(x = wt, y = mpg)) + geom_point()
+```
+
+Histograms
+----------
+
+```{r fig.height = 4, message=FALSE}
+ggplot(data = mtcars, aes(x = mpg)) + geom_histogram()
+```
+
+Histograms
+----------
+
+```{r fig.height = 4, message=FALSE}
+ggplot(data = mtcars, aes(x = mpg)) + geom_histogram(binwidth = 5)
+```
+
+Scatterplots with colors
+------------------------
+
+```{r fig.height=4}
+ggplot(data = iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point()
+```
+
+Non-aesthetics
+--------------
+
+- You can change properties without mapping to a variable by adding arguments
+  _outside_ `aes()`.
+
+```{r fig.height=3}
+ggplot(data = iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point(color = "red")
+```
+
+Scatterplots with fit line
+--------------------------
+
+```{r fig.height=3}
+ggplot(data = mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+Scatterplots with fit line
+--------------------------
+
+```{r fig.height=3}
+ggplot(data = iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Bar charts
+----------
+
+```{r echo=FALSE, message=FALSE, include=FALSE}
+knitr::knit("part_ii_basics.Rmd")
+```
+
+```{r fig.height=4}
+ggplot(data = statisticians, aes(x = older_than_50, fill = disease)) +
+  geom_bar()
+```
+
+Color vs. fill
+--------------
+
+- Line and point shapes have only one color. This color is mapped to the `color`
+  aesthetic
+
+- Bar shapes have two colors: one for the border, which is mapped to the `color`
+  aesthetic, and another for the bar itself, which is mapped to `fill`.
+
+Boxplots
+--------
+
+```{r fig.height=4}
+ggplot(statisticians, aes(x = disease, y = age)) + geom_boxplot()
+```
+
+
+Facets
+------
+
+- There is a `ggplot2` function that splits a plot into panels (or facets)
+  according to a grouping variable.
+
+Facets
+------
+
+```{r fig.height=3}
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ Species)
+```
+
+There is (a lot) more
+---------------------
+
+- More arguments to customize shapes (aesthetic mapping or otherwise).
+- More geoms.
+- Coordinate systems.
+- Position adjustments.
+- Statistical transformations.
+- Themes.
+- Packages that use ggplot2 (example: function `ggpairs()` from  `GGally`).
